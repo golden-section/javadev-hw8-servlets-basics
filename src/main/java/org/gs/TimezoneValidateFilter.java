@@ -14,7 +14,7 @@ public class TimezoneValidateFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         try {
-            req.setAttribute("timezone", ZoneId.of(timezoneParameter(req)));
+            req.setAttribute("timezone", ZoneId.of(getTimezoneParameter(req)));
         } catch (Exception exception) {
             res.setStatus(400);
             res.setContentType("text/html; charset=utf-8");
@@ -24,11 +24,11 @@ public class TimezoneValidateFilter extends HttpFilter {
             chain.doFilter(req, res);
     }
 
-    private String timezoneParameter(HttpServletRequest request) {
+    private String getTimezoneParameter(HttpServletRequest request) {
         String timezone = request.getParameter("timezone");
         if(timezone == null || timezone.isEmpty()) {
             return "UTC";
         }
-        return timezone.replace(' ', '+');
+        return timezone;
     }
 }

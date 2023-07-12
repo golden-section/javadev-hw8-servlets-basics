@@ -17,7 +17,7 @@ public class TimeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PATTERN_FORMAT);
         Instant instant = Instant.now();
-        ZoneId zoneId = ZoneId.of(timezoneParameter(req));
+        ZoneId zoneId = ZoneId.of(getTimezoneParameter(req));
         String formattedInstant = instant.atZone(zoneId).format(formatter);
 
         resp.setContentType("text/html; charset=utf-8");
@@ -25,11 +25,11 @@ public class TimeServlet extends HttpServlet {
         resp.getWriter().close();
     }
 
-    private String timezoneParameter(HttpServletRequest request) {
+    private String getTimezoneParameter(HttpServletRequest request) {
         String timezone = request.getParameter("timezone");
         if(timezone == null || timezone.isEmpty()) {
             return "UTC";
         }
-        return timezone.replace(' ', '+');
+        return timezone;
     }
 }
